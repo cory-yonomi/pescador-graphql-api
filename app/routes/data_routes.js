@@ -25,39 +25,50 @@ const requireToken = passport.authenticate('bearer', { session: false })
 
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
-  
-// const root = {
-//     hello: () => {
-//         return 'Hello world!';
-//     },
-//     ,
-//     createJob: (args) => {
-//         console.log(args)
-//         return Job.create(args.input).then(foundCustomer => {
-//             foundCustomer.height = Number(foundCustomer.height)
-//             foundCustomer.width = Number(foundCustomer.width)
-//             console.log(foundCustomer)
-//         })
-//     }
-// }
+
+// Filter objects by site name
+function uniqBy(a, key) {
+    var seen = {};
+    return a.filter(item => {
+        var k = key(item.sourceInfo.siteName);
+        return seen.hasOwnProperty(k) ? false : (seen[k] = true);
+    })
+}
 
 // Send a request to the USGS Instantaneous Water Values service and send that response back to client
-router.get('/waterData', (req, res, next) => {
+router.get('/waterData/site/:siteId', (req, res, next) => {
 	// axios req with params filled in, will be extracted from client request
 	axios({
 		method: 'get',
 		url: 'http://waterservices.usgs.gov/nwis/iv/',
 		params: {
 			format: 'json',
-			sites: '01646500',
-			siteStatus: 'all'
+			sites: req.params.siteId,
+			siteStatus: 'active'
 		}
 	})
 		.then(resp => {
-			console.log('response from usgs:', resp)
 			res.send(resp.data.value.timeSeries[0].sourceInfo.siteName)
 			// timeSeries breaks down days and stations if multiples are selected. If requesting a specific id and no date range
 			// only current values will be sent with a single item in the timeSeries array
+		})
+		.catch(next)
+})
+
+router.get('/waterData/county/:countyCode', (req, res, next) => {
+	axios({
+		method: 'get',
+		url: 'http://waterservices.usgs.gov/nwis/iv/',
+		params: {
+			format: 'json',
+			countyCd: req.params.countyCode,
+			siteType: 'LK,ST',
+			siteStatus: 'active'
+		}
+	})
+		.then(resp => {
+			const sites = uniqBy(resp.data.value.timeSeries, JSON.stringify)
+			res.send(sites)
 		})
 		.catch(next)
 })
