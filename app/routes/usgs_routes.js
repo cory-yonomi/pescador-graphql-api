@@ -46,13 +46,14 @@ router.get('/waterData/site/:siteId', (req, res, next) => {
 		}
 	})
 		.then(resp => {
-			res.send(resp.data.value.timeSeries[0].sourceInfo.siteName)
+			res.send(resp.data.value.timeSeries)
 			// timeSeries breaks down days and stations if multiples are selected. If requesting a specific id and no date range
 			// only current values will be sent with a single item in the timeSeries array
 		})
 		.catch(next)
 })
 
+// Get a list of sites within a county code
 router.get('/waterData/county/:countyCode', (req, res, next) => {
 	axios({
 		method: 'get',
@@ -66,7 +67,15 @@ router.get('/waterData/county/:countyCode', (req, res, next) => {
 	})
 		.then(resp => {
 			const sites = uniqBy(resp.data.value.timeSeries, JSON.stringify)
-			res.send(sites)
+			console.log("sites:\n", sites)
+			const siteData = sites.map(site => {
+				return {
+					siteId: site.sourceInfo.siteCode[0].value,
+					siteName: site.sourceInfo.siteName,
+
+				}
+			})
+			res.send(siteData)
 		})
 		.catch(next)
 })
