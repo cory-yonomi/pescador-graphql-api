@@ -22,4 +22,4 @@ const stationSchema = new mongoose.Schema(
     }
 )
 
-module.exports = mongoose.model('Station', stationSchema)
+module.exports = stationSchema

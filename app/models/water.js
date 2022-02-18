@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const stationSchema = require('./station')
 
 const waterSchema = new mongoose.Schema(
     {

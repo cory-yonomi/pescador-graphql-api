@@ -1,13 +1,13 @@
 {
-  "name": "express-auth-mongoose-boilerplate",
+  "name": "pescador-graphql-api",
   "version": "1.0.0",
-  "description": "Auth boilerplate for mongoose express using token auth",
+  "description": "Pescador GraphQL API",
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Timm Schoenborn",
+  "author": "Cory Sorel, auth built by Timm Schoenborn",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.25.0",

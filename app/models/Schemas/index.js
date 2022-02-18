@@ -1,5 +1,6 @@
 const { GraphQLString, GraphQLID, GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLInt, GraphQLFloat, GraphQLScalarType } = require('graphql')
-
+const Water = require('../water')
+const Station = require('../station')
 
 const dateScalar = new GraphQLScalarType({
     name: 'Date',
@@ -16,13 +17,60 @@ const dateScalar = new GraphQLScalarType({
       }
       return null; // Invalid hard-coded value (not an integer)
     },
+})
+  
+// **** TYPE DEFINITIONS ****
+const WaterType = new GraphQLObjectType({
+  name: 'Water',
+  fields: () => ({
+    _id: {type: GraphQLID },
+    name: {type: GraphQLString },
+    type: {type: GraphQLString },
+    stations: {type: new GraphQLList(StationType) }
   })
+})
+
+const StationType = new GraphQLObjectType({
+  name: 'Station',
+  fields: () => ({
+    _id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    usgsId: { type: GraphQLString },
+    longitude: { type: GraphQLFloat },
+    latitude: { type: GraphQLFloat }
+  })
+})
 
 // The root provides a resolver function for each API endpoint
 const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
     fields: {
-       
+      waters: {
+        type: new GraphQLList(WaterType),
+        resolve(parent, args) {
+          return Water.find({})
+        }
+      },
+      water: {
+        type: WaterType,
+        args: { _id: { type: GraphQLID } },
+        resolve(parent, { _id }) {
+          return Water.findById(_id)
+        }
+      },
+      stations: {
+        type: new GraphQLList(StationType),
+        resolve(parent, args) {
+          return Station.find({})
+        }
+      },
+      station: {
+        type: StationType,
+        args: { _id: { type: GraphQLID } },
+        resolve(parent, { _id }) {
+          return Station.findById(_id)
+        }
+      }
     }
 })
 
@@ -30,7 +78,19 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
     name: "Mutation",
     fields: {
-        
+      createWater: {
+        type: WaterType,
+        args: {
+          name: {type: GraphQLString },
+          type: {type: GraphQLString }
+        },
+        resolve(parent, args) {
+          return Water.create({
+            name: args.name,
+            type: args.type
+          })
+        }
+        }
     }
 })
 

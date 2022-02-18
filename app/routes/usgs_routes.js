@@ -26,9 +26,9 @@ const router = express.Router()
 
 // Filter objects by site name
 const uniqBy = (a, key) => {
-    var seen = {};
+    let seen = {};
     return a.filter(item => {
-        var k = key(item.sourceInfo.siteName);
+        let k = key(item.sourceInfo.siteName);
         return seen.hasOwnProperty(k) ? false : (seen[k] = true);
     })
 }
