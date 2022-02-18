@@ -1,5 +1,6 @@
 const { Decimal128 } = require('mongodb')
 const mongoose = require('mongoose')
+const water = require('./water')
 
 const stationSchema = new mongoose.Schema(
     {

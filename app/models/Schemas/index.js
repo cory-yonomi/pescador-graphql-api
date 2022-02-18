@@ -37,7 +37,8 @@ const StationType = new GraphQLObjectType({
     name: { type: GraphQLString },
     usgsId: { type: GraphQLString },
     longitude: { type: GraphQLFloat },
-    latitude: { type: GraphQLFloat }
+    latitude: { type: GraphQLFloat },
+    streamId: { type: GraphQLID }
   })
 })
 
@@ -78,6 +79,7 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
     name: "Mutation",
     fields: {
+      //CREATIONS
       createWater: {
         type: WaterType,
         args: {
@@ -90,7 +92,31 @@ const Mutation = new GraphQLObjectType({
             type: args.type
           })
         }
+      },
+      createStation: {
+        type: StationType,
+        args: {
+          name: { type: GraphQLString },
+          usgsId: { type: GraphQLString },
+          longitude: { type: GraphQLFloat },
+          latitude: { type: GraphQLFloat },
+          waterId: { type: GraphQLID }
+        },
+        resolve(parent, args) {
+          return (
+            Water.findById(args.waterId)
+              .then(foundWater => {
+                foundWater.stations.push({
+                  name: args.name,
+                  usgsId: args.usgsId,
+                  longitude: args.longitude,
+                  latitude: args.latitude
+                })
+                return place.save()
+            })
+          )
         }
+      }
     }
 })
 
