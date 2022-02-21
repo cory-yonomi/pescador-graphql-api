@@ -1,4 +1,4 @@
-const { GraphQLString, GraphQLID, GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLInt, GraphQLFloat, GraphQLScalarType } = require('graphql')
+const { GraphQLString, GraphQLID, GraphQLList, GraphQLObjectType, GraphQLInt, GraphQLSchema, GraphQL, GraphQLFloat, GraphQLScalarType } = require('graphql')
 const Water = require('../water')
 const Station = require('../station')
 
@@ -38,9 +38,35 @@ const StationType = new GraphQLObjectType({
     usgsId: { type: GraphQLString },
     longitude: { type: GraphQLFloat },
     latitude: { type: GraphQLFloat },
-    streamId: { type: GraphQLID }
+    waterId: { type: GraphQLID }
   })
 })
+
+const TripType = new GraphQLObjectType({
+  name: 'Trip',
+  fields: () => ({
+    _id: { type: GraphQLID },
+    date: { type: dateScalar },
+    stream: { type: GraphQLID },
+    weather: { type: GraphQLString },
+    description: { type: GraphQLString },
+    fish: { type: GraphQLString }
+  })
+})
+
+const FishType = new GraphQLObjectType({
+  name: 'Fish',
+  fields: () => ({
+    _id: { type: GraphQLID },
+    species: { type: GraphQLID },
+    length: { type: GraphQLFloat },
+    weight: { type: GraphQLFloat },
+    description: { type: GraphQLString },
+    caughtOn: { type: GraphQLString }
+  })
+})
+
+
 
 // The root provides a resolver function for each API endpoint
 const RootQuery = new GraphQLObjectType({
@@ -109,10 +135,15 @@ const Mutation = new GraphQLObjectType({
                 foundWater.stations.push({
                   name: args.name,
                   usgsId: args.usgsId,
-                  longitude: args.longitude,
-                  latitude: args.latitude
+                  longitude: parseFloat(args.longitude),
+                  latitude: parseFloat(args.latitude)
                 })
-                return place.save()
+                // this will not return the station created or even any station objects
+                // the graphql - mongodb interaction is weird, or maybe I'm a bad coder
+                // it's fine though, because I can just set off another query from the client
+                // to update the whole list of stations there
+                return foundWater.save()
+                  
             })
           )
         }

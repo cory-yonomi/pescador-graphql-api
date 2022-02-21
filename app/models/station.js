@@ -1,4 +1,4 @@
-const { Decimal128 } = require('mongodb')
+const { Decimal128, Long } = require('mongodb')
 const mongoose = require('mongoose')
 const water = require('./water')
 
@@ -13,14 +13,14 @@ const stationSchema = new mongoose.Schema(
             required: true
         },
         longitude: {
-            type: Decimal128,
+            type: Number,
             required: true
         },
         latitude: {
-            type: Decimal128,
+            type: Number,
             required: true
         }
     }
 )
 
-module.exports = stationSchema
+module.exports = stationSchema 
