@@ -1,7 +1,10 @@
-const { GraphQLString, GraphQLID, GraphQLList, GraphQLObjectType, GraphQLInt, GraphQLSchema, GraphQL, GraphQLFloat, GraphQLScalarType } = require('graphql')
+const { GraphQLString, GraphQLID, GraphQLList, GraphQLObjectType, GraphQLInt, GraphQLSchema, GraphQLFloat, GraphQLScalarType } = require('graphql')
 const Water = require('../water')
 const Station = require('../station')
+const Trip = require('../trip')
+const Fish = require('../fish')
 
+// Custom Date Scalar because GraphQL doesn't do dates? Makes it work like a JS Date object
 const dateScalar = new GraphQLScalarType({
     name: 'Date',
     description: 'Date custom scalar type',
@@ -34,11 +37,12 @@ const StationType = new GraphQLObjectType({
   name: 'Station',
   fields: () => ({
     _id: { type: GraphQLID },
+    waterId: { type: GraphQLID },
+    userId: { type: GraphQLID },
     name: { type: GraphQLString },
     usgsId: { type: GraphQLString },
     longitude: { type: GraphQLFloat },
     latitude: { type: GraphQLFloat },
-    waterId: { type: GraphQLID }
   })
 })
 
@@ -58,7 +62,9 @@ const FishType = new GraphQLObjectType({
   name: 'Fish',
   fields: () => ({
     _id: { type: GraphQLID },
-    species: { type: GraphQLID },
+    userId: { type: GraphQLID },
+    tripId: { type: GraphQLID},
+    species: { type: GraphQLString },
     length: { type: GraphQLFloat },
     weight: { type: GraphQLFloat },
     description: { type: GraphQLString },
@@ -110,6 +116,19 @@ const RootQuery = new GraphQLObjectType({
         resolve(parent, { _id }) {
           return Trip.findById(_id)
         }
+      },
+      fishes: {
+        type: new GraphQLList(FishType),
+        resolve(parent, args) {
+          return Fish.find({})
+        }
+      },
+      fish: {
+        type: FishType,
+        args: { _id: { type: GraphQLID } },
+        resolve(parent, { _id }) {
+          return Fish.findById(_id)
+        }
       }
     }
 })
@@ -118,7 +137,7 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
     name: "Mutation",
     fields: {
-      //CREATIONS
+      // *** DATA CREATIONS ***
       createWater: {
         type: WaterType,
         args: {
@@ -139,7 +158,8 @@ const Mutation = new GraphQLObjectType({
           usgsId: { type: GraphQLString },
           longitude: { type: GraphQLFloat },
           latitude: { type: GraphQLFloat },
-          waterId: { type: GraphQLID }
+          waterId: { type: GraphQLID },
+          userId: { type: GraphQLID }
         },
         resolve(parent, args) {
           return (
@@ -148,7 +168,8 @@ const Mutation = new GraphQLObjectType({
               usgsId: args.usgsId,
               longitude: parseFloat(args.longitude),
               latitude: parseFloat(args.latitude),
-              waterId: args.waterId
+              waterId: args.waterId,
+              userId: args.userId
             })
           )
         }
@@ -159,8 +180,8 @@ const Mutation = new GraphQLObjectType({
           date: { type: dateScalar },
           weather: { type: GraphQLString },
           description: { type: GraphQLString },
-          streamId: { type: GraphQLObjectType },
-          userId: { type: GraphQLObjectType }
+          streamId: { type: GraphQLID },
+          userId: { type: GraphQLID }
         },
         resolve(parent, args) {
           return (
@@ -170,6 +191,31 @@ const Mutation = new GraphQLObjectType({
               description: args.description,
               streamId: args.streamId,
               userId: args.userId
+            })
+          )
+        }
+      },
+      createFish: {
+        type: FishType,
+        args: {
+          userId: { type: GraphQLID },
+          tripId: { type: GraphQLID},
+          species: { type: GraphQLString },
+          length: { type: GraphQLFloat },
+          weight: { type: GraphQLFloat },
+          description: { type: GraphQLString },
+          caughtOn: { type: GraphQLString }
+        },
+        resolve(parent, args) {
+          return (
+            Fish.create({
+              userId: args.userId,
+              tripId: args.tripId,
+              species: args.species,
+              length: args.length,
+              weight: args.weight,
+              description: args.description,
+              caughtOn: args.caughtOn
             })
           )
         }

@@ -7,14 +7,15 @@ const fishSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: user
         },
-        waterId: {
+        tripId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: stream
+            ref: trip
         },
         species: String,
         length: Number,
         weight: Number,
-        description: String
+        description: String,
+        caughtOn: String
     },
     {
 		timestamps: true,
