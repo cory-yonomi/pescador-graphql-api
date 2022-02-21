@@ -47,7 +47,7 @@ const TripType = new GraphQLObjectType({
   fields: () => ({
     _id: { type: GraphQLID },
     date: { type: dateScalar },
-    stream: { type: GraphQLID },
+    streamId: { type: GraphQLID },
     weather: { type: GraphQLString },
     description: { type: GraphQLString },
     fish: { type: GraphQLString }
@@ -93,9 +93,9 @@ const RootQuery = new GraphQLObjectType({
       },
       station: {
         type: StationType,
-        args: { _id: { type: GraphQLID } },
-        resolve(parent, { _id }) {
-          return Station.findById(_id)
+        args: { waterId: { type: GraphQLID } },
+        resolve(parent, { waterId }) {
+          return Station.findOne({waterId: waterId})
         }
       }
     }
@@ -130,20 +130,12 @@ const Mutation = new GraphQLObjectType({
         },
         resolve(parent, args) {
           return (
-            Water.findById(args.waterId)
-              .then(foundWater => {
-                foundWater.stations.push({
-                  name: args.name,
-                  usgsId: args.usgsId,
-                  longitude: parseFloat(args.longitude),
-                  latitude: parseFloat(args.latitude)
-                })
-                // this will not return the station created or even any station objects
-                // the graphql - mongodb interaction is weird, or maybe I'm a bad coder
-                // it's fine though, because I can just set off another query from the client
-                // to update the whole list of stations there
-                return foundWater.save()
-                  
+            Station.create({
+              name: args.name,
+              usgsId: args.usgsId,
+              longitude: parseFloat(args.longitude),
+              latitude: parseFloat(args.latitude),
+              waterId: args.waterId
             })
           )
         }

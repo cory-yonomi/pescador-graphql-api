@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const stationSchema = require('./station')
 
 const waterSchema = new mongoose.Schema(
     {
@@ -11,8 +10,7 @@ const waterSchema = new mongoose.Schema(
         type: {
             type: String,
             required: true
-        },
-        stations: [stationSchema]
+        }
     }
 )
 

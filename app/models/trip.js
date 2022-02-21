@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const stream = require('./stream')
+const user = require('./user')
+const fish = require('./fish')
 
 const tripSchema = new mongoose.Schema(
     {
@@ -17,7 +19,11 @@ const tripSchema = new mongoose.Schema(
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: user
-        }
+        },
+        fish: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: fish
+        }]
     },
     {
 		timestamps: true,

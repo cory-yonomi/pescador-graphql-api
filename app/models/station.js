@@ -1,4 +1,3 @@
-const { Decimal128, Long } = require('mongodb')
 const mongoose = require('mongoose')
 const water = require('./water')
 
@@ -19,8 +18,12 @@ const stationSchema = new mongoose.Schema(
         latitude: {
             type: Number,
             required: true
+        },
+        waterId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: water
         }
     }
 )
 
-module.exports = stationSchema 
+module.exports = mongoose.model('Station', stationSchema) 
