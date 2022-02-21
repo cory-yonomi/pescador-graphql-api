@@ -97,6 +97,19 @@ const RootQuery = new GraphQLObjectType({
         resolve(parent, { waterId }) {
           return Station.findOne({waterId: waterId})
         }
+      },
+      trips: {
+        type: new GraphQLList(TripType),
+        resolve(parent, args) {
+          return Trip.find({})
+        }
+      },
+      trip: {
+        type: TripType,
+        args: { _id: { type: GraphQLID } },
+        resolve(parent, { _id }) {
+          return Trip.findById(_id)
+        }
       }
     }
 })
@@ -136,6 +149,27 @@ const Mutation = new GraphQLObjectType({
               longitude: parseFloat(args.longitude),
               latitude: parseFloat(args.latitude),
               waterId: args.waterId
+            })
+          )
+        }
+      },
+      createTrip: {
+        type: TripType,
+        args: {
+          date: { type: dateScalar },
+          weather: { type: GraphQLString },
+          description: { type: GraphQLString },
+          streamId: { type: GraphQLObjectType },
+          userId: { type: GraphQLObjectType }
+        },
+        resolve(parent, args) {
+          return (
+            Trip.create({
+              date: args.date,
+              weather: args.weather,
+              description: args.description,
+              streamId: args.streamId,
+              userId: args.userId
             })
           )
         }
