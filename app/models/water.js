@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const user = require('./user')
 
 const waterSchema = new mongoose.Schema(
     {
@@ -10,6 +11,10 @@ const waterSchema = new mongoose.Schema(
         type: {
             type: String,
             required: true
+        },
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: user
         }
     }
 )

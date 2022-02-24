@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
-const stream = require('./stream')
+const water = require('./water')
 const user = require('./user')
-const fish = require('./fish')
 
 const tripSchema = new mongoose.Schema(
     {
@@ -11,19 +10,15 @@ const tripSchema = new mongoose.Schema(
         },
         weather: String,
         description: String,
-        streamId: {
+        waterId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: stream,
+            ref: water,
             required: true
         },
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: user
-        },
-        fish: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: fish
-        }]
+        }
     },
     {
 		timestamps: true,

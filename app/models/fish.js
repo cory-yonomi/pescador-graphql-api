@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const user = require('./user')
+const trip = require('./trip')
 
 const fishSchema = new mongoose.Schema(
     {
