@@ -16,7 +16,8 @@ const BadParamsError = errors.BadParamsError
 const BadCredentialsError = errors.BadCredentialsError
 
 const User = require('../models/user')
-
+const Profile = require('../models/profile')
+const Water = require('../models/water')
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
 // it will also set `res.user`
@@ -28,6 +29,7 @@ const router = express.Router()
 // SIGN UP
 // POST /sign-up
 router.post('/sign-up', (req, res, next) => {
+	let profile
 	// start a promise chain, so that any errors will pass to `handle`
 	Promise.resolve(req.body.credentials)
 		// reject any requests where `credentials.password` is not present, or where
@@ -64,7 +66,7 @@ router.post('/sign-up', (req, res, next) => {
 router.post('/sign-in', (req, res, next) => {
 	const pw = req.body.credentials.password
 	let user
-
+	let profile
 	// find a user based on the email that was passed
 	User.findOne({ email: req.body.credentials.email })
 		.then((record) => {
@@ -93,8 +95,12 @@ router.post('/sign-in', (req, res, next) => {
 			}
 		})
 		.then((user) => {
+			console.log('user', user)
+			return Profile.find({ userId: user._id})
+		})
+		.then((data) => {
 			// return status 201, the email, and the new token
-			res.status(201).json({ user: user.toObject() })
+			res.status(201).json({user: user.toObject(), profile: data})
 		})
 		.catch(next)
 })

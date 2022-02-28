@@ -7,15 +7,18 @@ const profileSchema = new mongoose.Schema(
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: user,
-            required: true
+            required: true,
+            unique: true
         },
         favoriteStation: {
             type: mongoose.Schema.Types.ObjectId,
             ref: station
         },
+        firstName: String,
+        lastName: String,
         zipCode: Number,
         style: String
     }
 )
 
-modules.export = mongoose.model('Profile', profileSchema)
+module.exports = mongoose.model('Profile', profileSchema)
