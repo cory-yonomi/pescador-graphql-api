@@ -12,6 +12,18 @@ const userSchema = new mongoose.Schema(
 			required: true,
 		},
 		token: String,
+		favoriteStation: {
+            type: String
+        },
+        firstName: {
+			type: String,
+			required: true,
+		},
+        lastName: String,
+        zipCode: {
+			type: Number,
+			required: true,
+		}
 	},
 	{
 		timestamps: true,

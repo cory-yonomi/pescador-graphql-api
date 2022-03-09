@@ -65,8 +65,6 @@ router.post('/sign-up', (req, res, next) => {
 // POST /sign-in
 router.post('/sign-in', (req, res, next) => {
 	const pw = req.body.credentials.password
-	let user
-	let profile
 	// find a user based on the email that was passed
 	User.findOne({ email: req.body.credentials.email })
 		.then((record) => {
@@ -95,12 +93,8 @@ router.post('/sign-in', (req, res, next) => {
 			}
 		})
 		.then((user) => {
-			console.log('user', user)
-			return Profile.find({ userId: user._id})
-		})
-		.then((data) => {
 			// return status 201, the email, and the new token
-			res.status(201).json({user: user.toObject(), profile: data})
+			res.status(201).json({user: user.toObject()})
 		})
 		.catch(next)
 })
