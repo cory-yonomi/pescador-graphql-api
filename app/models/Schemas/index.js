@@ -3,7 +3,7 @@ const Water = require('../water')
 const Station = require('../station')
 const Trip = require('../trip')
 const Fish = require('../fish')
-const Profile = require('../profile')
+
 
 // Custom Date Scalar because GraphQL doesn't do dates? Makes it work like a JS Date object
 const dateScalar = new GraphQLScalarType({
@@ -73,18 +73,6 @@ const FishType = new GraphQLObjectType({
   })
 })
 
-const ProfileType = new GraphQLObjectType({
-  name: 'Profile',
-  fields: () => ({
-    userId: { type: GraphQLID },
-    favoriteStream: { type: GraphQLID },
-    firstName: { type: GraphQLString },
-    lastName: { type: GraphQLString },
-    zipCode: { type: GraphQLInt },
-    style: { type: GraphQLString }
-  })
-})
-
 
 
 // The root provides a resolver function for each API endpoint
@@ -142,14 +130,7 @@ const RootQuery = new GraphQLObjectType({
         resolve(parent, { _id }) {
           return Fish.findById(_id)
         }
-      },
-      profile: {
-        type: ProfileType,
-        args: { _id: { type: GraphQLID } },
-        resolve(parent, { _id }) {
-          return Fish.findById(_id)
-        }
-      } 
+      }, 
     }
 })
 
@@ -238,29 +219,6 @@ const Mutation = new GraphQLObjectType({
               weight: args.weight,
               description: args.description,
               caughtOn: args.caughtOn
-            })
-          )
-        }
-      },
-      createProfile: {
-        type: ProfileType,
-        args: {
-          userId: { type: GraphQLID },
-          favoriteStation: { type: GraphQLID},
-          firstName: { type: GraphQLString },
-          lastName: { type: GraphQLString },
-          style: { type: GraphQLString },
-          zipCode: { type: GraphQLInt }
-        },
-        resolve(parent, args) {
-          return (
-            Profile.create({
-              userId: args.userId,
-              favoriteStation: args.favoriteStation,
-              firstName: args.firstName,
-              lastName: args.lastName,
-              style: args.style,
-              zipCode: args.zipCode
             })
           )
         }

@@ -13,16 +13,14 @@ const userSchema = new mongoose.Schema(
 		},
 		token: String,
 		favoriteStation: {
-            type: String
+            type: mongoose.Schema.Types.ObjectId
         },
         firstName: {
-			type: String,
-			required: true,
+			type: String
 		},
         lastName: String,
         zipCode: {
-			type: Number,
-			required: true,
+			type: Number
 		}
 	},
 	{

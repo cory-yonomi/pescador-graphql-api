@@ -16,7 +16,6 @@ const BadParamsError = errors.BadParamsError
 const BadCredentialsError = errors.BadCredentialsError
 
 const User = require('../models/user')
-const Profile = require('../models/profile')
 const Water = require('../models/water')
 // passing this as a second argument to `router.<verb>` will make it
 // so that a token MUST be passed for that route to be available
@@ -29,7 +28,7 @@ const router = express.Router()
 // SIGN UP
 // POST /sign-up
 router.post('/sign-up', (req, res, next) => {
-	let profile
+	
 	// start a promise chain, so that any errors will pass to `handle`
 	Promise.resolve(req.body.credentials)
 		// reject any requests where `credentials.password` is not present, or where

@@ -31,6 +31,10 @@ const clientDevPort = 3000
 mongoose.connect(db, {
 	useNewUrlParser: true,
 })
+mongoose.connection
+	.on('open', () => console.log('Connected to DB: Pescador DEV'))
+	.on('close', () => console.log('Disconnected from DB'))
+	.on('error', (error) => console.log(error))
 
 // instantiate express application object
 const app = express()
@@ -77,7 +81,7 @@ app.use(errorHandler)
 
 // run API on designated port (4741 in this case)
 app.listen(port, () => {
-	console.log('listening on port ' + port)
+	console.log('Serving on port ' + port)
 })
 
 // needed for testing

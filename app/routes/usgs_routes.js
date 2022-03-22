@@ -20,6 +20,8 @@ const removeBlanks = require('../../lib/remove_blank_fields')
 // so that a token MUST be passed for that route to be available
 // it will also set `req.user`
 const requireToken = passport.authenticate('bearer', { session: false })
+const fips = require('../../lib/fips_lookup_by_state')
+const states = Object.values(fips)
 
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
@@ -31,6 +33,22 @@ const uniqBy = (a, key) => {
         let k = key(item.sourceInfo.siteName);
         return seen.hasOwnProperty(k) ? false : (seen[k] = true);
     })
+}
+
+// transform state abbreviation and county name into FIPS county code
+const getCountyCode = (s, n) => {
+	let code
+	states.forEach(state => {
+		if (s === state._name) {
+			let foundState = Object.entries(state)
+			foundState.forEach(county => {
+				if (county[0].includes(n)) {
+					code = county[1]
+				}
+			})
+		}
+	})
+	return code
 }
 
 // Send a request to the USGS Instantaneous Water Values service and send that response back to client
@@ -54,13 +72,16 @@ router.get('/waterData/site/:siteId', (req, res, next) => {
 })
 
 // Get a list of sites within a county code
-router.get('/waterData/county/:countyCode', (req, res, next) => {
+router.get('/waterData/county', (req, res, next) => {	
+	// First we get the county code from the JSON file
+	let countyCode = getCountyCode(req.query.state, req.query.search)
+	// Then we query USGS for all sites in that county
 	axios({
 		method: 'get',
 		url: 'http://waterservices.usgs.gov/nwis/iv/',
 		params: {
 			format: 'json',
-			countyCd: req.params.countyCode,
+			countyCd: countyCode,
 			siteType: 'LK,ST',
 			siteStatus: 'active'
 		}
@@ -78,6 +99,7 @@ router.get('/waterData/county/:countyCode', (req, res, next) => {
 			res.send(siteData)
 		})
 		.catch(next)
+	
 })
 
 module.exports = router
