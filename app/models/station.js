@@ -20,10 +20,6 @@ const stationSchema = new mongoose.Schema(
             type: Number,
             required: true
         },
-        waterId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: water
-        },
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: user

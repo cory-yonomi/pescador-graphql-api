@@ -82,14 +82,14 @@ const RootQuery = new GraphQLObjectType({
       waters: {
         type: new GraphQLList(WaterType),
         resolve(parent, args) {
-          return Water.find({})
+          return Water.find({}).populate('stations')
         }
       },
       water: {
         type: WaterType,
         args: { _id: { type: GraphQLID } },
         resolve(parent, { _id }) {
-          return Water.findById(_id)
+          return Water.findById(_id).populate('stations')
         }
       },
       stations: {

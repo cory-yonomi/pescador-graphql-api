@@ -39,7 +39,7 @@ const uniqBy = (a, key) => {
 const getCountyCode = (s, n) => {
 	let code
 	states.forEach(state => {
-		if (s === state._name) {
+		if (s === state._abbrev) {
 			let foundState = Object.entries(state)
 			foundState.forEach(county => {
 				if (county[0].includes(n)) {
@@ -74,7 +74,7 @@ router.get('/waterData/site/:siteId', (req, res, next) => {
 // Get a list of sites within a county code
 router.get('/waterData/county', (req, res, next) => {	
 	// First we get the county code from the JSON file
-	let countyCode = getCountyCode(req.query.state, req.query.search)
+	let countyCode = getCountyCode(req.query.state, req.query.countyName)
 	// Then we query USGS for all sites in that county
 	axios({
 		method: 'get',
@@ -93,7 +93,6 @@ router.get('/waterData/county', (req, res, next) => {
 				return {
 					siteId: site.sourceInfo.siteCode[0].value,
 					siteName: site.sourceInfo.siteName,
-
 				}
 			})
 			res.send(siteData)

@@ -2,6 +2,7 @@
   "AL": {
     "_name": "Alabama",
     "_fips": "01",
+    "_abbrev": "AL",
     "Autauga County": "01001",
     "Bibb County": "01007",
     "Chambers County": "01017",
@@ -73,6 +74,7 @@
   "AK": {
     "_name": "Alaska",
     "_fips": "02",
+    "_abbrev": "AK",
     "Fairbanks North Star Borough": "02090",
     "Aleutians East Borough": "02013",
     "Aleutians West Census Area": "02016",
@@ -106,6 +108,7 @@
   "AZ": {
     "_name": "Arizona",
     "_fips": "04",
+    "_abbrev": "AZ",
     "Graham County": "04009",
     "Apache County": "04001",
     "Cochise County": "04003",
@@ -125,6 +128,7 @@
   "AR": {
     "_name": "Arkansas",
     "_fips": "05",
+    "_abbrev": "AR",
     "Sebastian County": "05131",
     "Sevier County": "05133",
     "Sharp County": "05135",
@@ -204,6 +208,7 @@
   "CA": {
     "_name": "California",
     "_fips": "06",
+    "_abbrev": "CA",
     "Colusa County": "06011",
     "Butte County": "06007",
     "Alameda County": "06001",
@@ -266,6 +271,7 @@
   "LA": {
     "_name": "Louisiana",
     "_fips": "22",
+    "_abbrev": "LA",
     "Acadia Parish": "22001",
     "Assumption Parish": "22007",
     "Allen Parish": "22003",
@@ -334,6 +340,7 @@
   "KY": {
     "_name": "Kentucky",
     "_fips": "21",
+    "_abbrev": "KY",
     "Livingston County": "21139",
     "Meade County": "21163",
     "Logan County": "21141",
@@ -458,6 +465,7 @@
   "CO": {
     "_name": "Colorado",
     "_fips": "08",
+    "_abbrev": "CO",
     "Costilla County": "08023",
     "Crowley County": "08025",
     "Custer County": "08027",
@@ -526,6 +534,7 @@
   "CT": {
     "_name": "Connecticut",
     "_fips": "09",
+    "_abbrev": "CT",
     "Fairfield County": "09001",
     "Litchfield County": "09005",
     "Hartford County": "09003",
@@ -538,6 +547,7 @@
   "DE": {
     "_name": "Delaware",
     "_fips": "10",
+    "_abbrev": "DE",
     "Kent County": "10001",
     "Sussex County": "10005",
     "New Castle County": "10003"
@@ -545,11 +555,13 @@
   "DC": {
     "_name": "District of Columbia",
     "_fips": "11",
+    "_abbrev": "DC",
     "District of Columbia": "11001"
   },
   "FL": {
     "_name": "Florida",
     "_fips": "12",
+    "_abbrev": "FL",
     "Brevard County": "12009",
     "Charlotte County": "12015",
     "Alachua County": "12001",
@@ -621,6 +633,7 @@
   "GA": {
     "_name": "Georgia",
     "_fips": "13",
+    "_abbrev": "GA",
     "Banks County": "13011",
     "Barrow County": "13013",
     "Ben Hill County": "13017",
@@ -784,6 +797,7 @@
   "HI": {
     "_name": "Hawaii",
     "_fips": "15",
+    "_abbrev": "HI",
     "Maui County": "15009",
     "Hawaii County": "15001",
     "Honolulu County": "15003",
@@ -793,6 +807,7 @@
   "ID": {
     "_name": "Idaho",
     "_fips": "16",
+    "_abbrev": "ID",
     "Bear Lake County": "16007",
     "Benewah County": "16009",
     "Ada County": "16001",
@@ -841,6 +856,7 @@
   "IL": {
     "_name": "Illinois",
     "_fips": "17",
+    "_abbrev": "IL",
     "Saline County": "17165",
     "Pope County": "17151",
     "Pulaski County": "17153",
@@ -947,6 +963,7 @@
   "IN": {
     "_name": "Indiana",
     "_fips": "18",
+    "_abbrev": "IN",
     "Harrison County": "18061",
     "Jasper County": "18073",
     "Hancock County": "18059",
@@ -1043,6 +1060,7 @@
   "IA": {
     "_name": "Iowa",
     "_fips": "19",
+    "_abbrev": "IA",
     "Adair County": "19001",
     "Bremer County": "19017",
     "Allamakee County": "19005",
@@ -1146,6 +1164,7 @@
   "KS": {
     "_name": "Kansas",
     "_fips": "20",
+    "_abbrev": "KS",
     "Mitchell County": "20123",
     "Montgomery County": "20125",
     "Morton County": "20129",
@@ -1255,6 +1274,7 @@
   "ME": {
     "_name": "Maine",
     "_fips": "23",
+    "_abbrev": "ME",
     "Androscoggin County": "23001",
     "Aroostook County": "23003",
     "Hancock County": "23009",
@@ -1275,6 +1295,7 @@
   "MD": {
     "_name": "Maryland",
     "_fips": "24",
+    "_abbrev": "MD",
     "Charles County": "24017",
     "Allegany County": "24001",
     "Anne Arundel County": "24003",
@@ -1303,6 +1324,7 @@
   "MA": {
     "_name": "Massachusetts",
     "_fips": "25",
+    "_abbrev": "MA",
     "Bristol County": "25005",
     "Barnstable County": "25001",
     "Dukes County": "25007",
@@ -1321,6 +1343,7 @@
   "MI": {
     "_name": "Michigan",
     "_fips": "26",
+    "_abbrev": "MI",
     "Oakland County": "26125",
     "Midland County": "26111",
     "Missaukee County": "26113",
@@ -1408,6 +1431,7 @@
   "MS": {
     "_name": "Mississippi",
     "_fips": "28",
+    "_abbrev": "MS",
     "Bolivar County": "28011",
     "Adams County": "28001",
     "Alcorn County": "28003",
@@ -1494,6 +1518,7 @@
   "MO": {
     "_name": "Missouri",
     "_fips": "29",
+    "_abbrev": "MO",
     "Ripley County": "29181",
     "St. Charles County": "29183",
     "Shannon County": "29203",
@@ -1613,6 +1638,7 @@
   "MT": {
     "_name": "Montana",
     "_fips": "30",
+    "_abbrev": "MT",
     "Blaine County": "30005",
     "Big Horn County": "30003",
     "Beaverhead County": "30001",
@@ -1673,6 +1699,7 @@
   "NE": {
     "_name": "Nebraska",
     "_fips": "31",
+    "_abbrev": "NE",
     "Box Butte County": "31013",
     "Adams County": "31001",
     "Blaine County": "31009",
@@ -1770,6 +1797,7 @@
   "NV": {
     "_name": "Nevada",
     "_fips": "32",
+    "_abbrev": "NE",
     "Clark County": "32003",
     "Douglas County": "32005",
     "Churchill County": "32001",
@@ -1791,6 +1819,7 @@
   "NH": {
     "_name": "New Hampshire",
     "_fips": "33",
+    "_abbrev": "NH",
     "Hillsborough County": "33011",
     "Coos County": "33007",
     "Grafton County": "33009",
@@ -1805,6 +1834,7 @@
   "NJ": {
     "_name": "New Jersey",
     "_fips": "34",
+    "_abbrev": "NJ",
     "Warren County": "34041",
     "Salem County": "34033",
     "Somerset County": "34035",
@@ -1830,6 +1860,7 @@
   "NM": {
     "_name": "New Mexico",
     "_fips": "35",
+    "_abbrev": "NM",
     "Chaves County": "35005",
     "Catron County": "35003",
     "Bernalillo County": "35001",
@@ -1867,6 +1898,7 @@
   "NY": {
     "_name": "New York",
     "_fips": "36",
+    "_abbrev": "NY",
     "Genesee County": "36037",
     "Greene County": "36039",
     "Livingston County": "36051",
@@ -1933,6 +1965,7 @@
   "NC": {
     "_name": "North Carolina",
     "_fips": "37",
+    "_abbrev": "NC",
     "Anson County": "37007",
     "Avery County": "37011",
     "Alexander County": "37003",
@@ -2037,6 +2070,7 @@
   "ND": {
     "_name": "North Dakota",
     "_fips": "38",
+    "_abbrev": "ND",
     "Benson County": "38005",
     "Bottineau County": "38009",
     "Billings County": "38007",
@@ -2094,6 +2128,7 @@
   "OH": {
     "_name": "Ohio",
     "_fips": "39",
+    "_abbrev": "OH",
     "Jefferson County": "39081",
     "Mahoning County": "39099",
     "Lake County": "39085",
@@ -2186,6 +2221,7 @@
   "OK": {
     "_name": "Oklahoma",
     "_fips": "40",
+    "_abbrev": "OK",
     "Haskell County": "40061",
     "Hughes County": "40063",
     "Jackson County": "40065",
@@ -2267,6 +2303,7 @@
   "OR": {
     "_name": "Oregon",
     "_fips": "41",
+    "_abbrev": "OR",
     "Union County": "41061",
     "Wallowa County": "41063",
     "Wasco County": "41065",
@@ -2307,6 +2344,7 @@
   "PA": {
     "_name": "Pennsylvania",
     "_fips": "42",
+    "_abbrev": "PA",
     "Beaver County": "42007",
     "Adams County": "42001",
     "Allegheny County": "42003",
@@ -2378,6 +2416,7 @@
   "RI": {
     "_name": "Rhode Island",
     "_fips": "44",
+    "_abbrev": "RI",
     "Bristol County": "44001",
     "Kent County": "44003",
     "Newport County": "44005",
@@ -2387,6 +2426,7 @@
   "SC": {
     "_name": "South Carolina",
     "_fips": "45",
+    "_abbrev": "SC",
     "Bamberg County": "45009",
     "Abbeville County": "45001",
     "Allendale County": "45005",
@@ -2437,6 +2477,7 @@
   "SD": {
     "_name": "South Dakota",
     "_fips": "46",
+    "_abbrev": "SD",
     "Bennett County": "46007",
     "Aurora County": "46003",
     "Brookings County": "46011",
@@ -2507,6 +2548,7 @@
   "TN": {
     "_name": "Tennessee",
     "_fips": "47",
+    "_abbrev": "TN",
     "Washington County": "47179",
     "Williamson County": "47187",
     "Wayne County": "47181",
@@ -2606,6 +2648,7 @@
   "TX": {
     "_name": "Texas",
     "_fips": "48",
+    "_abbrev": "TX",
     "Baylor County": "48023",
     "Anderson County": "48001",
     "Aransas County": "48007",
@@ -2864,6 +2907,7 @@
   "UT": {
     "_name": "Utah",
     "_fips": "49",
+    "_abbrev": "UT",
     "Beaver County": "49001",
     "Box Elder County": "49003",
     "Carbon County": "49007",
@@ -2897,6 +2941,7 @@
   "VT": {
     "_name": "Vermont",
     "_fips": "50",
+    "_abbrev": "VT",
     "Lamoille County": "50015",
     "Addison County": "50001",
     "Bennington County": "50003",
@@ -2915,6 +2960,7 @@
   "VA": {
     "_name": "Virginia",
     "_fips": "51",
+    "_abbrev": "VA",
     "Fairfax County": "51059",
     "Fauquier County": "51061",
     "Floyd County": "51063",
@@ -3053,6 +3099,7 @@
   "WA": {
     "_name": "Washington",
     "_fips": "53",
+    "_abbrev": "WA",
     "Douglas County": "53017",
     "Asotin County": "53003",
     "Chelan County": "53007",
@@ -3096,6 +3143,7 @@
   "WV": {
     "_name": "West Virginia",
     "_fips": "54",
+    "_abbrev": "WV",
     "Calhoun County": "54013",
     "Barbour County": "54001",
     "Boone County": "54005",
@@ -3155,6 +3203,7 @@
   "WI": {
     "_name": "Wisconsin",
     "_fips": "55",
+    "_abbrev": "WI",
     "Green County": "55045",
     "Green Lake County": "55047",
     "Iowa County": "55049",
@@ -3231,6 +3280,7 @@
   "WY": {
     "_name": "Wyoming",
     "_fips": "56",
+    "_abbrev": "WY",
     "Albany County": "56001",
     "Lincoln County": "56023",
     "Big Horn County": "56003",
@@ -3258,6 +3308,7 @@
   "PR": {
     "_name": "Puerto Rico",
     "_fips": "72",
+    "_abbrev": "PR",
     "Adjuntas Municipio": "72001",
     "Aguada Municipio": "72003",
     "Arroyo Municipio": "72015",
