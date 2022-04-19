@@ -51,6 +51,32 @@ const getCountyCode = (s, n) => {
 	return code
 }
 
+const seedStates = () => {
+	
+	states.forEach(state => {
+		const newState = {}
+
+		newState.name = state._name
+		newState.stateFips = state._fips
+		newState.abbrev = state._abbrev
+		newState.counties = []
+
+		
+		let foundState = Object.entries(state)
+		foundState.forEach(county => {
+			if (county[0] !== '_name' || county[0] !== '_fips' || county[0] !== '_abbrev') {
+				newState.counties.push({
+					county: county[0],
+					fips: county[1]
+				})	
+			}
+		})
+		
+		
+	})
+	return code
+}
+
 // Send a request to the USGS Instantaneous Water Values service and send that response back to client
 router.get('/waterData/site/:siteId', (req, res, next) => {
 	// axios req with params filled in, will be extracted from client request
@@ -76,16 +102,18 @@ router.get('/waterData/county', (req, res, next) => {
 	// First we get the county code from the JSON file
 	let countyCode = getCountyCode(req.query.state, req.query.countyName)
 	// Then we query USGS for all sites in that county
-	axios({
-		method: 'get',
-		url: 'http://waterservices.usgs.gov/nwis/iv/',
-		params: {
-			format: 'json',
-			countyCd: countyCode,
-			siteType: 'LK,ST',
-			siteStatus: 'active'
-		}
-	})
+	console.log("countyCode:\n", countyCode)
+	if(countyCode){
+		axios({
+			method: 'get',
+			url: 'http://waterservices.usgs.gov/nwis/iv/',
+			params: {
+				format: 'json',
+				countyCd: countyCode,
+				siteType: 'LK,ST',
+				siteStatus: 'active'
+			}
+		})
 		.then(resp => {
 			const sites = uniqBy(resp.data.value.timeSeries, JSON.stringify)
 			console.log("sites:\n", sites)
@@ -97,7 +125,10 @@ router.get('/waterData/county', (req, res, next) => {
 			})
 			res.send(siteData)
 		})
-		.catch(next)
+			.catch(next)
+	} else {
+		res.send(null)
+	}
 	
 })
 
