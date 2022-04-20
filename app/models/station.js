@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const water = require('./water')
-const user = require('./user')
 
 const stationSchema = new mongoose.Schema(
     {
@@ -19,10 +18,6 @@ const stationSchema = new mongoose.Schema(
         latitude: {
             type: Number,
             required: true
-        },
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: user
         }
     }
 )
