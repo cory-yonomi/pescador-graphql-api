@@ -30,6 +30,7 @@ const WaterType = new GraphQLObjectType({
     _id: {type: GraphQLID },
     name: {type: GraphQLString },
     type: {type: GraphQLString },
+    userId: {type: GraphQLID},
     stations: {type: new GraphQLList(StationType) }
   })
 })
@@ -79,17 +80,24 @@ const FishType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
     name: "RootQueryType",
     fields: {
-      waters: {
+      allWaters: {
         type: new GraphQLList(WaterType),
         resolve(parent, args) {
-          return Water.find({}).populate('stations')
+          return Water.find({})
         }
       },
+      userWaters: {
+        type: new GrapqhQLList(WaterType),
+        resolve(parent, { _id }) {
+          return Water.find({userId: _id})
+        }
+      }
+      ,
       water: {
         type: WaterType,
         args: { _id: { type: GraphQLID } },
         resolve(parent, { _id }) {
-          return Water.findById(_id).populate('stations')
+          return Water.findById(_id)
         }
       },
       stations: {
@@ -102,7 +110,7 @@ const RootQuery = new GraphQLObjectType({
         type: StationType,
         args: { _id: { type: GraphQLID } },
         resolve(parent, { _id }) {
-          return Station.findOne({_id: _id})
+          return Station.findOne({_id: _id}).populate('waterId')
         }
       },
       trips: {

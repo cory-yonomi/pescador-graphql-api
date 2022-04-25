@@ -21,3 +21,10 @@ stream conditions, tackle, and fish caught. I need to keep a list of stream or l
 
 I would like to see the measuring stations within a range of my current location or a placed pin. I would like to be able to store lists or groups of stations to access
 regularly.
+
+## GraphQL Queries Needed
+
+- All for each owned model
+- Single water with stations and fish
+- Single station with fish and trips
+- Single trip with water, station, and fish
