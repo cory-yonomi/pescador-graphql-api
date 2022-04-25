@@ -31,7 +31,6 @@ const WaterType = new GraphQLObjectType({
     name: {type: GraphQLString },
     type: {type: GraphQLString },
     userId: {type: GraphQLID},
-    stations: {type: new GraphQLList(StationType) }
   })
 })
 
@@ -87,9 +86,10 @@ const RootQuery = new GraphQLObjectType({
         }
       },
       userWaters: {
-        type: new GrapqhQLList(WaterType),
-        resolve(parent, { _id }) {
-          return Water.find({userId: _id})
+        type: new GraphQLList(WaterType),
+        args: { userId: {type: GraphQLID }},
+        resolve(parent, { userId }) {
+          return Water.find({userId: userId})
         }
       }
       ,
