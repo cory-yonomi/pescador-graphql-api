@@ -145,4 +145,14 @@ router.delete('/sign-out', requireToken, (req, res, next) => {
 		.catch(next)
 })
 
+router.post('/user/favorite', requireToken, (req, res, next) => {
+	
+	User.findByIdAndUpdate(req.user.id, { favoriteStation: req.body.stationId }, {new: true})
+		.then(()=> {
+			console.log('req:', req)
+			res.sendStatus(204)
+		})
+		.catch(next)
+})
+
 module.exports = router
