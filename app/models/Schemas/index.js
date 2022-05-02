@@ -38,12 +38,10 @@ const StationType = new GraphQLObjectType({
   name: 'Station',
   fields: () => ({
     _id: { type: GraphQLID },
-    waterId: { type: GraphQLID },
-    userId: { type: GraphQLID },
     name: { type: GraphQLString },
     usgsId: { type: GraphQLString },
-    longitude: { type: GraphQLFloat },
-    latitude: { type: GraphQLFloat },
+    long: { type: GraphQLFloat },
+    lat: { type: GraphQLFloat },
   })
 })
 
@@ -167,21 +165,17 @@ const Mutation = new GraphQLObjectType({
         args: {
           name: { type: GraphQLString },
           usgsId: { type: GraphQLString },
-          longitude: { type: GraphQLFloat },
-          latitude: { type: GraphQLFloat },
-          waterId: { type: GraphQLID },
-          userId: { type: GraphQLID }
+          long: { type: GraphQLFloat },
+          lat: { type: GraphQLFloat }
         },
         resolve(parent, args) {
           return (
-            Station.create({
+            Station.findOneAndUpdate({ usgsId: args.usgsId }, {
               name: args.name,
               usgsId: args.usgsId,
-              longitude: parseFloat(args.longitude),
-              latitude: parseFloat(args.latitude),
-              waterId: args.waterId,
-              userId: args.userId
-            })
+              long: parseFloat(args.long),
+              lat: parseFloat(args.lat)
+            }, {new: true, upsert: true})
           )
         }
       },

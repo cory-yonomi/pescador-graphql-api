@@ -121,6 +121,8 @@ router.get('/waterData/county', (req, res, next) => {
 				return {
 					siteId: site.sourceInfo.siteCode[0].value,
 					siteName: site.sourceInfo.siteName,
+					siteLong: site.sourceInfo.geoLocation.geogLocation.longitude,
+					siteLat: site.sourceInfo.geoLocation.geogLocation.latitude,
 				}
 			})
 			res.send(siteData)

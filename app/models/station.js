@@ -10,11 +10,11 @@ const stationSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        longitude: {
+        long: {
             type: Number,
             required: true
         },
-        latitude: {
+        lat: {
             type: Number,
             required: true
         }
