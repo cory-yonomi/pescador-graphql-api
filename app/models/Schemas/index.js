@@ -31,6 +31,7 @@ const WaterType = new GraphQLObjectType({
     name: {type: GraphQLString },
     type: {type: GraphQLString },
     userId: {type: GraphQLID},
+    stations: {type: new GraphQLList(StationType)}
   })
 })
 
@@ -87,7 +88,7 @@ const RootQuery = new GraphQLObjectType({
         type: new GraphQLList(WaterType),
         args: { userId: {type: GraphQLID }},
         resolve(parent, { userId }) {
-          return Water.find({userId: userId})
+          return Water.find({userId: userId}).populate('stations')
         }
       }
       ,
@@ -95,13 +96,14 @@ const RootQuery = new GraphQLObjectType({
         type: WaterType,
         args: { _id: { type: GraphQLID } },
         resolve(parent, { _id }) {
-          return Water.findById(_id)
+          return Water.findById(_id).populate('stations')
         }
       },
       stations: {
         type: new GraphQLList(StationType),
-        resolve(parent, args) {
-          return Station.find({})
+        args: { _id: {type: GraphQLID }},
+        resolve(parent, { _id }) {
+          return Station.find({waterId: _id})
         }
       },
       station: {
@@ -166,7 +168,8 @@ const Mutation = new GraphQLObjectType({
           name: { type: GraphQLString },
           usgsId: { type: GraphQLString },
           long: { type: GraphQLFloat },
-          lat: { type: GraphQLFloat }
+          lat: { type: GraphQLFloat },
+          waterId: {type: GraphQLID}
         },
         resolve(parent, args) {
           return (
@@ -176,6 +179,21 @@ const Mutation = new GraphQLObjectType({
               long: parseFloat(args.long),
               lat: parseFloat(args.lat)
             }, {new: true, upsert: true})
+              .then(station => {
+                console.log('station', station)
+                console.log('args', args)
+                let stationId = station._id
+                Water.find({ _id: args.waterId })
+                  .then(water => {
+                    console.log('water', water[0].stations)
+                    if(water[0].stations.includes(stationId)){
+                      return water[0]
+                    } else {
+                      water[0].stations.push(stationId)
+                      return water[0].save()
+                    }
+                  })
+              })
           )
         }
       },
