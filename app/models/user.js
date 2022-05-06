@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const station = require('./station')
 
 const userSchema = new mongoose.Schema(
 	{
@@ -13,7 +14,8 @@ const userSchema = new mongoose.Schema(
 		},
 		token: String,
 		favoriteStation: {
-            type: mongoose.Schema.Types.ObjectId
+            type: mongoose.Schema.Types.ObjectId,
+			ref: station
         },
         firstName: {
 			type: String
