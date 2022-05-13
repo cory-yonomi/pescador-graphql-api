@@ -86,7 +86,8 @@ router.get('/waterData/site/:siteId', (req, res, next) => {
 		params: {
 			format: 'json',
 			sites: req.params.siteId,
-			siteStatus: 'active'
+			siteStatus: 'active',
+			period: 'P3D'
 		}
 	})
 		.then(resp => {
