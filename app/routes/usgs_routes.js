@@ -96,8 +96,11 @@ router.get('/waterData/site/:siteId', (req, res, next) => {
 			// need to break down the response into data that the client can turn into a chart
 			// resp.data.value.timeSeries has an array containing data for each measurement (streamflow, gage height, etc)
 			// that is available for each Water (unless specified otherwise)
-			const sortedData = stationSort(resp.data.value.timeSeries)
-			res.send(sortedData)
+			const station = {
+				name: resp.data.value.timeSeries[0].sourceInfo.siteName,
+				values: stationSort(resp.data.value.timeSeries)
+			}
+			res.send(station)
 			// timeSeries breaks down days and stations if multiples are selected. If requesting a specific id and no date range
 			// only current values will be sent with a single item in the timeSeries array
 		})
