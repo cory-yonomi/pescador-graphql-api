@@ -91,7 +91,16 @@ router.get('/waterData/site/:siteId', (req, res, next) => {
 		}
 	})
 		.then(resp => {
-			res.send(resp.data.value.timeSeries)
+			// need to break down the response into data that the client can turn into a chart
+			// resp.data.value.timeSeries has an array containing data for each measurement (streamflow, gage height, etc)
+			// that is available for each Water (unless specified otherwise)
+			
+			// separate into new object
+				// potentially pare down array size
+				// value for each measurement array
+				// extracting dateTime and value
+			// send 
+			res.send(resp.data.value)
 			// timeSeries breaks down days and stations if multiples are selected. If requesting a specific id and no date range
 			// only current values will be sent with a single item in the timeSeries array
 		})
