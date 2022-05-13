@@ -23,6 +23,8 @@ const requireToken = passport.authenticate('bearer', { session: false })
 const fips = require('../../lib/fips_lookup_by_state')
 const states = Object.values(fips)
 
+const stationSort = require('../../lib/station_sort')
+
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
@@ -94,13 +96,8 @@ router.get('/waterData/site/:siteId', (req, res, next) => {
 			// need to break down the response into data that the client can turn into a chart
 			// resp.data.value.timeSeries has an array containing data for each measurement (streamflow, gage height, etc)
 			// that is available for each Water (unless specified otherwise)
-			
-			// separate into new object
-				// potentially pare down array size
-				// value for each measurement array
-				// extracting dateTime and value
-			// send 
-			res.send(resp.data.value)
+			const sortedData = stationSort(resp.data.value.timeSeries)
+			res.send(sortedData)
 			// timeSeries breaks down days and stations if multiples are selected. If requesting a specific id and no date range
 			// only current values will be sent with a single item in the timeSeries array
 		})
