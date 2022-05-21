@@ -58,7 +58,7 @@ const geoKey = process.env.GEO_API_KEY
 const getZipCoords = (zip) => {
 	const params = {
 		access_key: geoKey,
-		query: `${zip}`
+		query: `Travis County, TX`
 	}
 
 	return axios.get(`http://api.positionstack.com/v1/forward`, {params})
@@ -73,7 +73,7 @@ const getWeather = (lat, long) => {
 		units: 'imperial'
 	}
 
-	return axios.get('https://https://api.openweathermap.org/data/2.5/onecall', {params})
+	return axios.get('https://api.openweathermap.org/data/2.5/onecall', {params})
 }
 
 // *********** ROUTES **************
