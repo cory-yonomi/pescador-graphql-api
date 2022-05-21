@@ -6,6 +6,7 @@ const passport = require('passport')
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
 const customErrors = require('../../lib/custom_errors')
+require('dotenv').config()
 
 // we'll use this function to send 404 when non-existant document is requested
 const handle404 = customErrors.handle404
@@ -52,32 +53,30 @@ const getCountyCode = (s, n) => {
 	})
 	return code
 }
+const geoKey = process.env.GEO_API_KEY
+// Get long and lat for a zipcode
+const getZipCoords = (zip) => {
+	const params = {
+		access_key: geoKey,
+		query: `${zip}`
+	}
 
-const seedStates = () => {
-	
-	states.forEach(state => {
-		const newState = {}
-
-		newState.name = state._name
-		newState.stateFips = state._fips
-		newState.abbrev = state._abbrev
-		newState.counties = []
-
-		
-		let foundState = Object.entries(state)
-		foundState.forEach(county => {
-			if (county[0] !== '_name' || county[0] !== '_fips' || county[0] !== '_abbrev') {
-				newState.counties.push({
-					county: county[0],
-					fips: county[1]
-				})	
-			}
-		})
-		
-		
-	})
-	return code
+	return axios.get(`http://api.positionstack.com/v1/forward`, {params})
 }
+
+const getWeather = (lat, long) => {
+	const params = {
+		appid: process.env.WEATHER_API_KEY,
+		lat: lat,
+		lon: long,
+		exclude: 'minutely',
+		units: 'imperial'
+	}
+
+	return axios.get('https://https://api.openweathermap.org/data/2.5/onecall', {params})
+}
+
+// *********** ROUTES **************
 
 // Send a request to the USGS Instantaneous Water Values service and send that response back to client
 router.get('/waterData/site/:siteId', (req, res, next) => {
@@ -142,6 +141,15 @@ router.get('/waterData/county', (req, res, next) => {
 		res.send(null)
 	}
 	
+})
+
+router.post('/search', removeBlanks, (req, res) => {
+	getZipCoords(req.body.search.zip)
+		.then(resp => {
+			getWeather(resp.data.data[0].latitude, resp.data.data[0].longitude)
+				.then(resp => console.log('weather response', resp.data))
+		})
+		.catch(err => console.log(err))
 })
 
 module.exports = router
