@@ -21,6 +21,7 @@ const removeBlanks = require('../../lib/remove_blank_fields')
 // so that a token MUST be passed for that route to be available
 // it will also set `req.user`
 const requireToken = passport.authenticate('bearer', { session: false })
+const boundingBox = require('../../lib/bounding_box')
 const fips = require('../../lib/fips_lookup_by_state')
 const states = Object.values(fips)
 
@@ -74,6 +75,14 @@ const getWeather = (lat, long) => {
 	}
 
 	return axios.get('https://api.openweathermap.org/data/2.5/onecall', {params})
+}
+
+const getConditionsBbox = (lat, long) => {
+	let {west, east, north, south} = boundingBox(lat, long)
+	return axios({
+		method: 'get',
+		url:`http://waterservices.usgs.gov/nwis/iv/?format=json&bBox=${west},${south},${east},${north}&parameterCd=00060&siteStatus=all`
+	})
 }
 
 // *********** ROUTES **************
@@ -146,10 +155,19 @@ router.get('/waterData/county', (req, res, next) => {
 router.post('/search', removeBlanks, (req, res) => {
 	getZipCoords(req.body.search.zip)
 		.then(resp => {
-			getWeather(resp.data.data[0].latitude, resp.data.data[0].longitude)
-				.then(resp => console.log('weather response', resp.data))
+			console.log('coords returned from positionstack:', resp.data.data[0])
+			Promise.all([
+				getWeather(resp.data.data[0].latitude, resp.data.data[0].longitude),
+				getConditionsBbox(resp.data.data[0].latitude, resp.data.data[0].longitude)
+			])
+				.then(resp => {
+					res.send({
+						weather: resp[0].data,
+						sites: resp[1].data.value
+					})
+				})
 		})
-		.catch(err => console.log(err))
+		.catch(err => console.log(err.data))
 })
 
 module.exports = router
