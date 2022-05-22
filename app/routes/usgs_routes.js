@@ -152,7 +152,7 @@ router.get('/waterData/county', (req, res, next) => {
 	
 })
 
-router.post('/search', removeBlanks, (req, res) => {
+router.post('/search/zip', removeBlanks, (req, res) => {
 	// get a coord for the zip code
 	getZipCoords(req.body.search.zip)
 		.then(resp => {
@@ -171,6 +171,21 @@ router.post('/search', removeBlanks, (req, res) => {
 				})
 		})
 		.catch(err => console.log(err.data))
+})
+
+router.post('/search/coords', removeBlanks, (req, req) => {
+	Promise.all([
+		getWeather(req.body.search.lat, req.body.search.lon),
+		getConditionsBbox(req.body.search.lat, req.body.search.lon)
+	])
+		.then(resp => {
+			// send the pair of response objects back to client
+			res.send({
+				weather: resp[0].data,
+				sites: resp[1].data.value.timeSeries
+			})
+		})
+		.catch(err => console.log(err))
 })
 
 module.exports = router
