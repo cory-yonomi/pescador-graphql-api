@@ -59,7 +59,7 @@ const geoKey = process.env.GEO_API_KEY
 const getZipCoords = (zip) => {
 	const params = {
 		access_key: geoKey,
-		query: `Travis County, TX`
+		query: zip
 	}
 
 	return axios.get(`http://api.positionstack.com/v1/forward`, {params})
@@ -153,14 +153,17 @@ router.get('/waterData/county', (req, res, next) => {
 })
 
 router.post('/search', removeBlanks, (req, res) => {
+	// get a coord for the zip code
 	getZipCoords(req.body.search.zip)
 		.then(resp => {
-			console.log('coords returned from positionstack:', resp.data.data[0])
+			// simultaneously retrieve weather data for the coords and
+			// build a bounding box around those coords and get stations in them
 			Promise.all([
 				getWeather(resp.data.data[0].latitude, resp.data.data[0].longitude),
 				getConditionsBbox(resp.data.data[0].latitude, resp.data.data[0].longitude)
 			])
 				.then(resp => {
+					// send the pair of response objects back to client
 					res.send({
 						weather: resp[0].data,
 						sites: resp[1].data.value.timeSeries
