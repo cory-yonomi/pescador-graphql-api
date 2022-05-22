@@ -163,7 +163,7 @@ router.post('/search', removeBlanks, (req, res) => {
 				.then(resp => {
 					res.send({
 						weather: resp[0].data,
-						sites: resp[1].data.value
+						sites: resp[1].data.value.timeSeries
 					})
 				})
 		})
