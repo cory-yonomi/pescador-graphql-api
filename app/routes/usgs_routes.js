@@ -173,7 +173,7 @@ router.post('/search/zip', removeBlanks, (req, res) => {
 		.catch(err => console.log(err.data))
 })
 
-router.post('/search/coords', removeBlanks, (req, req) => {
+router.post('/search/coords', removeBlanks, (req, res) => {
 	Promise.all([
 		getWeather(req.body.search.lat, req.body.search.lon),
 		getConditionsBbox(req.body.search.lat, req.body.search.lon)
