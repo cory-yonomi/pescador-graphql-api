@@ -56,12 +56,11 @@ const getCountyCode = (s, n) => {
 }
 const geoKey = process.env.GEO_API_KEY
 // Get long and lat for a zipcode
-const getZipCoords = (zip) => {
+const getCoords = (query) => {
 	const params = {
 		access_key: geoKey,
-		query: zip
+		query: query
 	}
-
 	return axios.get(`http://api.positionstack.com/v1/forward`, {params})
 }
 
@@ -186,6 +185,27 @@ router.post('/search/coords', removeBlanks, (req, res) => {
 			})
 		})
 		.catch(err => console.log(err))
+})
+
+router.get('/search/county', removeBlanks, (req, res) => {
+	let query = `${req.params.countyName}, ${req.params.state}`
+	getCoords(query)
+	.then(resp => {
+		// simultaneously retrieve weather data for the coords and
+		// build a bounding box around those coords and get stations in them
+		Promise.all([
+			getWeather(resp.data.data[0].latitude, resp.data.data[0].longitude),
+			getConditionsBbox(resp.data.data[0].latitude, resp.data.data[0].longitude)
+		])
+			.then(resp => {
+				// send the pair of response objects back to client
+				res.send({
+					weather: resp[0].data,
+					sites: resp[1].data.value.timeSeries
+				})
+			})
+	})
+	.catch(err => console.log(err))
 })
 
 module.exports = router
