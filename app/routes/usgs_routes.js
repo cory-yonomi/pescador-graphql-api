@@ -54,14 +54,15 @@ const getCountyCode = (s, n) => {
 	})
 	return code
 }
-const geoKey = process.env.GEO_API_KEY
+const geoKey = process.env.MAPQUEST_API_KEY
 // Get long and lat for a zipcode
-const getCoords = (query) => {
+const getZipCoords = (query) => {
 	const params = {
-		access_key: geoKey,
-		query: query
+		key: geoKey,
+		postalCode: query
 	}
-	return axios.get(`http://api.positionstack.com/v1/forward`, {params})
+	// return axios.get(`http://api.positionstack.com/v1/forward`, {params})
+	return axios.get('http://www.mapquestapi.com/geocoding/v1/address', {params})
 }
 
 const getWeather = (lat, long) => {
@@ -156,13 +157,16 @@ router.get('/waterData/county', (req, res, next) => {
 router.post('/search/zip', removeBlanks, (req, res) => {
 	// get a coord for the zip code
 	console.log('zip:', req.body.search.zip)
-	getCoords(req.body.search.zip)
+	// resp.results[0].locations[0].latLng.lat
+	// resp.results[0].locations[0].latLng.lng
+	getZipCoords(req.body.search.zip)
 		.then(resp => {
+			console.log('geocoding response:', resp.data)
 			// simultaneously retrieve weather data for the coords and
 			// build a bounding box around those coords and get stations in them
 			Promise.all([
-				getWeather(resp.data.data[0].latitude, resp.data.data[0].longitude),
-				getConditionsBbox(resp.data.data[0].latitude, resp.data.data[0].longitude)
+				getWeather(resp.data.results[0].locations[0].latLng.lat, resp.data.results[0].locations[0].latLng.lng),
+				getConditionsBbox(resp.data.results[0].locations[0].latLng.lat, resp.data.results[0].locations[0].latLng.lng)
 			])
 				.then(resp => {
 					let sites = resp[1].data.value.timeSeries.map(site => {
