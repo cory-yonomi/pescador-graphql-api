@@ -190,17 +190,26 @@ router.post('/search/zip', removeBlanks, (req, res) => {
 
 router.post('/search/coords', removeBlanks, (req, res) => {
 	Promise.all([
-		getWeather(req.body.search.lat, req.body.search.lon),
-		getConditionsBbox(req.body.search.lat, req.body.search.lon)
+		getWeather(req.body.search.lat, req.body.search.long),
+		getConditionsBbox(req.body.search.lat, req.body.search.long)
 	])
-		.then(resp => {
-			// send the pair of response objects back to client
-			res.send({
-				weather: resp[0].data,
-				sites: resp[1].data.value.timeSeries
-			})
+	.then(resp => {
+		let sites = resp[1].data.value.timeSeries.map(site => {
+			return {
+				name: site.sourceInfo.siteName,
+				usgsId: site.sourceInfo.siteCode[0].value,
+				long: site.sourceInfo.geoLocation.geogLocation.longitude,
+				lat: site.sourceInfo.geoLocation.geogLocation.latitude,
+				value: site.values[0].value
+			}
 		})
-		.catch(err => console.log(err))
+		// send the pair of response objects back to client
+		res.send({
+			weather: resp[0].data,
+			sites: sites	
+		})
+	})
+	.catch(err => console.log(err))
 })
 
 module.exports = router
