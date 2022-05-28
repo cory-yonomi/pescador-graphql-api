@@ -132,14 +132,16 @@ router.get('/waterData/county', (req, res, next) => {
 			}
 		})
 		.then(resp => {
+			// remove duplicate objects because of two value params default
 			const sites = uniqBy(resp.data.value.timeSeries, JSON.stringify)
 			console.log("sites:\n", sites)
+			// create an array of pared down objects to display on client side
 			const siteData = sites.map(site => {
 				return {
-					siteId: site.sourceInfo.siteCode[0].value,
-					siteName: site.sourceInfo.siteName,
-					siteLong: site.sourceInfo.geoLocation.geogLocation.longitude,
-					siteLat: site.sourceInfo.geoLocation.geogLocation.latitude,
+					usgsId: site.sourceInfo.siteCode[0].value,
+					name: site.sourceInfo.siteName,
+					long: site.sourceInfo.geoLocation.geogLocation.longitude,
+					lat: site.sourceInfo.geoLocation.geogLocation.latitude,
 				}
 			})
 			res.send(siteData)
@@ -153,7 +155,8 @@ router.get('/waterData/county', (req, res, next) => {
 
 router.post('/search/zip', removeBlanks, (req, res) => {
 	// get a coord for the zip code
-	getZipCoords(req.body.search.zip)
+	console.log('zip:', req.body.search.zip)
+	getCoords(req.body.search.zip)
 		.then(resp => {
 			// simultaneously retrieve weather data for the coords and
 			// build a bounding box around those coords and get stations in them
@@ -162,10 +165,19 @@ router.post('/search/zip', removeBlanks, (req, res) => {
 				getConditionsBbox(resp.data.data[0].latitude, resp.data.data[0].longitude)
 			])
 				.then(resp => {
+					let sites = resp[1].data.value.timeSeries.map(site => {
+						return {
+							name: site.sourceInfo.siteName,
+							usgsId: site.sourceInfo.siteCode[0].value,
+							long: site.sourceInfo.geoLocation.geogLocation.longitude,
+							lat: site.sourceInfo.geoLocation.geogLocation.latitude,
+							value: site.values[0].value
+						}
+					})
 					// send the pair of response objects back to client
 					res.send({
 						weather: resp[0].data,
-						sites: resp[1].data.value.timeSeries
+						sites: sites	
 					})
 				})
 		})
@@ -185,27 +197,6 @@ router.post('/search/coords', removeBlanks, (req, res) => {
 			})
 		})
 		.catch(err => console.log(err))
-})
-
-router.get('/search/county', removeBlanks, (req, res) => {
-	let query = `${req.params.countyName}, ${req.params.state}`
-	getCoords(query)
-	.then(resp => {
-		// simultaneously retrieve weather data for the coords and
-		// build a bounding box around those coords and get stations in them
-		Promise.all([
-			getWeather(resp.data.data[0].latitude, resp.data.data[0].longitude),
-			getConditionsBbox(resp.data.data[0].latitude, resp.data.data[0].longitude)
-		])
-			.then(resp => {
-				// send the pair of response objects back to client
-				res.send({
-					weather: resp[0].data,
-					sites: resp[1].data.value.timeSeries
-				})
-			})
-	})
-	.catch(err => console.log(err))
 })
 
 module.exports = router
