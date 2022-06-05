@@ -22,6 +22,7 @@ const removeBlanks = require('../../lib/remove_blank_fields')
 // it will also set `req.user`
 const requireToken = passport.authenticate('bearer', { session: false })
 const boundingBox = require('../../lib/bounding_box')
+const siteReducer = require('../../lib/siteReducer')
 const fips = require('../../lib/fips_lookup_by_state')
 const states = Object.values(fips)
 
@@ -81,7 +82,7 @@ const getConditionsBbox = (lat, long) => {
 	let {west, east, north, south} = boundingBox(lat, long)
 	return axios({
 		method: 'get',
-		url:`http://waterservices.usgs.gov/nwis/iv/?format=json&bBox=${west},${south},${east},${north}&parameterCd=00060&siteStatus=all`
+		url:`http://waterservices.usgs.gov/nwis/iv/?format=json&bBox=${west},${south},${east},${north}&parameterCd=00060,00065&siteType=LK,ST&siteStatus=all`
 	})
 }
 
@@ -156,29 +157,29 @@ router.get('/waterData/county', (req, res, next) => {
 
 router.post('/search/zip', removeBlanks, (req, res) => {
 	// get a coord for the zip code
-	console.log('zip:', req.body.search.zip)
-	// resp.results[0].locations[0].latLng.lat
-	// resp.results[0].locations[0].latLng.lng
 	getZipCoords(req.body.search.zip)
 		.then(resp => {
-			console.log('geocoding response:', resp.data)
 			// simultaneously retrieve weather data for the coords and
 			// build a bounding box around those coords and get stations in them
+			let latitude = resp.data.results[0].locations[0].latLng.lat
+			let longitude = resp.data.results[0].locations[0].latLng.lng
 			Promise.all([
-				getWeather(resp.data.results[0].locations[0].latLng.lat, resp.data.results[0].locations[0].latLng.lng),
-				getConditionsBbox(resp.data.results[0].locations[0].latLng.lat, resp.data.results[0].locations[0].latLng.lng)
+				getWeather(latitude, longitude),
+				getConditionsBbox(latitude, longitude)
 			])
 				.then(resp => {
-					let sites = resp[1].data.value.timeSeries.map(site => {
-						return {
-							name: site.sourceInfo.siteName,
-							usgsId: site.sourceInfo.siteCode[0].value,
-							long: site.sourceInfo.geoLocation.geogLocation.longitude,
-							lat: site.sourceInfo.geoLocation.geogLocation.latitude,
-							value: site.values[0].value
-						}
-					})
+					let sites = siteReducer(resp[1].data.value.timeSeries)
+					// let sites = resp[1].data.value.timeSeries.map(site => {
+					// 	return {
+					// 		name: site.sourceInfo.siteName,
+					// 		usgsId: site.sourceInfo.siteCode[0].value,
+					// 		long: site.sourceInfo.geoLocation.geogLocation.longitude,
+					// 		lat: site.sourceInfo.geoLocation.geogLocation.latitude,
+					// 		value: site.values[0].value
+					// 	}
+					// })
 					// send the pair of response objects back to client
+					
 					res.send({
 						weather: resp[0].data,
 						sites: sites	
