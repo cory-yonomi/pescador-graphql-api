@@ -23,7 +23,7 @@ const auth = require('./lib/auth')
 
 // define server and client ports
 // used for cors and local port declaration
-const serverDevPort = 8000
+const serverDevPort = 8081
 const clientDevPort = 3000
 
 // establish database connection
@@ -44,7 +44,7 @@ const app = express()
 // `CLIENT_ORIGIN` is an environment variable that will be set on Heroku
 app.use(
 	cors({
-		origin: process.env.CLIENT_ORIGIN || `http://localhost:${clientDevPort}`,
+		origin: process.env.CLIENT_ORIGIN || `http://pescador-app.netlify.app`,
 	})
 )
 
